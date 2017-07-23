@@ -1,9 +1,4 @@
-// console.log("Up and Running!");
-
-
-
-
-
+console.log("Up and Running!");
 
 var cards = [
 	{
@@ -29,40 +24,70 @@ var cards = [
 ];
 
 
+// create array to store cards
 var cardsInPlay = [];
-var cardOne = cards[0];
-var cardTwo = cards[2];
+var score = 0;
 
-var checkForMatch = function() {
-	if (cardsInPlay.length === 2) {
+var flipCard = function () {
 
-		if (cardsInPlay[0] === cardsInPlay[2]) {
-			alert('You found a match!');
-		} else if (cardsInPlay[0] !== cardsInPlay[2]) {
-			alert("sorry try again!");
-		}
-	}
+  var cardId = this.getAttribute('data-id');
+  this.setAttribute('src', cards[cardId].cardImage);
 
+  console.log('User flipped ' + cards[cardId].rank);
+  console.log(cards[cardId].cardImage);
+  console.log(cards[cardId].suit);
+
+  cardsInPlay.push(cards[cardId].rank);
+
+  checkForMatch();
+};
+
+//start function - createBoard
+var createBoard = function(){
+
+  for (var i = 0; i < cards.length; i++) {
+
+    var cardElement = document.createElement('img');
+
+    cardElement.setAttribute('src', 'images/back.png');
+    cardElement.setAttribute('data-id', i);
+    cardElement.addEventListener('click', flipCard);
+    document.getElementById('game-board').appendChild(cardElement);
+  }
+};
+
+// check for a match
+function checkForMatch() {
+
+  if (cardsInPlay.length === 2) {
+
+  } else if (cardsInPlay[0] === cardsInPlay[1]) {
+
+    alert('You found a match!');
+
+    updateScore();
+
+  } else {
+
+    alert('Sorry try again');
+  }
+};
+
+function updateScore(){
+
+  score ++;
+  document.getElementById('score-board').innerHTML = score;
 }
 
-var flipCard = function(cardId) {
-	console.log("user flipped " + cards[cardId].rank)
-	cardsInPlay.push(cards[cardId].rank)
-	console.log("cardImage " + cards[cardId].cardImage)
-	console.log("cardImage " + cards[cardId].suit)
-	checkForMatch()
-} 
-flipCard(0)
-flipCard(2)
+function reset(){
 
+  cardsInPlay = []; // stores the cards that have been turned
 
+  var cardElements = document.getElementById('game-board').children; // creating a ref to the cards
 
+  for (var i = 0; i < cardElements.length; i++) {
+      cardElements[i].setAttribute('src', 'images/back.png');
+  }
+};
 
-
-
-
-// alert("You found a match!");
-
-
-
-
+createBoard();
